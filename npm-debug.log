@@ -1,0 +1,104 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'E:\\Programme\\node.js\\node.exe',
+1 verbose cli   'E:\\Programme\\node.js\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'n' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.4
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readGlobalPackageData
+7 silly fetchPackageMetaData n
+8 silly fetchNamedPackageData n
+9 silly mapToRegistry name n
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'n',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   escapedName: 'n',
+12 silly mapToRegistry   name: 'n',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri https://registry.npmjs.org/n
+14 verbose request uri https://registry.npmjs.org/n
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 19:08:38
+17 verbose request id b8a690f9fa41ebc3
+18 http request GET https://registry.npmjs.org/n
+19 http 200 https://registry.npmjs.org/n
+20 verbose headers { date: 'Mon, 15 Aug 2022 17:08:37 GMT',
+20 verbose headers   'content-type': 'application/json',
+20 verbose headers   'transfer-encoding': 'chunked',
+20 verbose headers   connection: 'keep-alive',
+20 verbose headers   'cf-ray': '73b3887f7ae56d86-MUC',
+20 verbose headers   'access-control-allow-origin': '*',
+20 verbose headers   'cache-control': 'public, max-age=300',
+20 verbose headers   etag: 'W/"b61ecb72e1327a0ab2749e9ec1925ea3"',
+20 verbose headers   'last-modified': 'Sat, 16 Jul 2022 04:10:58 GMT',
+20 verbose headers   vary: 'accept-encoding, accept',
+20 verbose headers   'cf-cache-status': 'REVALIDATED',
+20 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+20 verbose headers   'x-amz-replication-status': 'COMPLETED',
+20 verbose headers   server: 'cloudflare',
+20 verbose headers   'content-encoding': 'gzip' }
+21 silly get cb [ 200,
+21 silly get   { date: 'Mon, 15 Aug 2022 17:08:37 GMT',
+21 silly get     'content-type': 'application/json',
+21 silly get     'transfer-encoding': 'chunked',
+21 silly get     connection: 'keep-alive',
+21 silly get     'cf-ray': '73b3887f7ae56d86-MUC',
+21 silly get     'access-control-allow-origin': '*',
+21 silly get     'cache-control': 'public, max-age=300',
+21 silly get     etag: 'W/"b61ecb72e1327a0ab2749e9ec1925ea3"',
+21 silly get     'last-modified': 'Sat, 16 Jul 2022 04:10:58 GMT',
+21 silly get     vary: 'accept-encoding, accept',
+21 silly get     'cf-cache-status': 'REVALIDATED',
+21 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+21 silly get     'x-amz-replication-status': 'COMPLETED',
+21 silly get     server: 'cloudflare',
+21 silly get     'content-encoding': 'gzip' } ]
+22 verbose get saving n to C:\Users\Gamer\AppData\Roaming\npm-cache\registry.npmjs.org\n\.cache.json
+23 verbose correctMkdir C:\Users\Gamer\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+24 silly install normalizeTree
+25 silly loadCurrentTree Finishing
+26 silly loadIdealTree Starting
+27 silly install loadIdealTree
+28 silly cloneCurrentTree Starting
+29 silly install cloneCurrentTreeToIdealTree
+30 silly cloneCurrentTree Finishing
+31 silly loadShrinkwrap Starting
+32 silly install loadShrinkwrap
+33 silly loadShrinkwrap Finishing
+34 silly loadAllDepsIntoIdealTree Starting
+35 silly install loadAllDepsIntoIdealTree
+36 silly rollbackFailedOptional Starting
+37 silly rollbackFailedOptional Finishing
+38 silly runTopLevelLifecycles Finishing
+39 silly install printInstalled
+40 verbose stack Error: Unsupported platform for n@9.0.0: wanted {"name":"n","description":"Interactively Manage All Your Node Versions","version":"9.0.0","author":{"name":"TJ Holowaychuk","email":"tj@vision-media.ca"},"homepage":"https://github.com/tj/n","bugs":{"url":"https://github.com/tj/n/issues"},"contributors":[{"name":"n Contributors","url":"https://github.com/tj/n/graphs/contributors"}],"keywords":["nvm","node","version","manager","switcher","node","binary","env"],"bin":{"n":"bin/n"},"repository":{"type":"git","url":"git://github.com/tj/n.git"},"scripts":{"test":"test/bin/run-all-tests"},"devDependencies":{"bats":"^1.2.1","bats-assert":"github:bats-core/bats-assert","bats-support":"github:bats-core/bats-support"},"preferGlobal":true,"os":["!win32"],"engines":{"node":"*"},"license":"MIT","gitHead":"807be980aa052d443170778cda85c08379693e0e","_id":"n@9.0.0","_nodeVersion":"16.16.0","_npmVersion":"8.11.0","dist":{"integrity":"sha512-OZie4DuAZASChFZnIkf5BYEYEhMe6utRTAWM+98aS6N0pRLNxcDEMwxSsy7is98zTlDICcQB2dym+u10pEOtBg==","shasum":"0f57f3567d4e6721cbd62eec7972875fa69dfe84","tarball":"https://registry.npmjs.org/n/-/n-9.0.0.tgz","fileCount":4,"unpackedSize":61998,"signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQCckB/jmLXX7C++RmkInDXevJUtdCiuIwBvS8g90rkLMAIgTRQ8QJcU8ndWj1h4HJaM11KB2z61krlEHK9AvvxrQWo="}],"npm-signature":"-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v4.10.10\r\nComment: https://openpgpjs.org\r\n\r\nwsFzBAEBCAAGBQJi0jpQACEJED1NWxICdlZqFiEECWMYAoorWMhJKdjhPU1b\r\nEgJ2VmqU7A/9HmgRCjrR0K43LSb3uiPZpwMopsDIOqlnDtcXhm1iQlwkoYrL\r\nPa/eSj8aSAYuurBYluFDBcy5y06T0yBWEmsydHHtNLGysGWC4SxO0Fg9DshU\r\niKb65yG+FhSN5kQnpYg8/fVI4Gk6kxK5iI8hzYv24hIP0nJBRGEwADNYNnsx\r\nLDH8Qb5BM12gZMUlwj6STQ0ogShgeImzKp8+ledlBhJ9BBdAXkhMwBww5qAd\r\ny5Rwj7DzesFEEadJGHr4e4DStKs22LAoa33AndzhRl0lHjRHwzs/FXF4iQna\r\nXJCQTnFhfPEhCBhZ5rKJfk38VBinWJRixNXcs/Py9IC6Lu+5WkytjbSLUHM1\r\nQN96AFovo0WagB0H/o+WXxkkcYHCkgmy+jgsSrMjyuxZOvv0ePmMZvV7DtwU\r\nhzonmoNa4TxVZDRj24iNkCr5ZmCEiHBkm5Ms9yceYmWQegWLTWK8tTPpCIEt\r\n2MaHxjN9F3hKstZYKFNjVhewxGRBD9AND2CeZ8Erjndskrdt+sJ7KFzFvx8d\r\nFT2dTYCqYFy2YhaGEqntPjPnRI8L+wGyc0xqE6vcyxxJvq2cxseUVAVXop/K\r\nrt2iWdh8vPqTljWDV8FWWYmTUA53VxwQjf4pq8GndWwLdUMjlhFy9jNRVCTA\r\nV2uFJyB3jFh0qhslf5a/F8qlew62uU3vxpw=\r\n=SGKL\r\n-----END PGP SIGNATURE-----\r\n"},"_npmUser":{"name":"shadowspawn","email":"npm_j@ruru.gen.nz"},"directories":{},"maintainers":[{"name":"bat","email":"ben@benatkin.com"},{"name":"tjholowaychuk","email":"tj@vision-media.ca"},{"name":"shadowspawn","email":"npm_j@ruru.gen.nz"}],"_npmOperationalInternal":{"host":"s3://npm-registry-packages","tmp":"tmp/n_9.0.0_1657944655841_0.4320964224970856"},"_hasShrinkwrap":false,"_from":"n","_resolved":"https://registry.npmjs.org/n/-/n-9.0.0.tgz","_shasum":"0f57f3567d4e6721cbd62eec7972875fa69dfe84","_requested":{"raw":"n","scope":null,"escapedName":"n","name":"n","rawSpec":"","spec":"latest","type":"tag"},"_spec":"n","_where":"G:\\Dokumente\\Programme\\Pathfinding-Visualizer-App","_args":[[{"raw":"n","scope":null,"escapedName":"n","name":"n","rawSpec":"","spec":"latest","type":"tag"},"G:\\Dokumente\\Programme\\Pathfinding-Visualizer-App"]],"readme":"ERROR: No README data found!"} (current: {"os":"win32","cpu":"x64"})
+40 verbose stack     at checkPlatform (E:\Programme\node.js\node_modules\npm\node_modules\npm-install-checks\index.js:45:14)
+40 verbose stack     at thenWarnEngineIssues (E:\Programme\node.js\node_modules\npm\lib\install\validate-args.js:41:5)
+40 verbose stack     at E:\Programme\node.js\node_modules\npm\node_modules\iferr\index.js:13:50
+40 verbose stack     at checkEngine (E:\Programme\node.js\node_modules\npm\node_modules\npm-install-checks\index.js:24:10)
+40 verbose stack     at module.exports.isInstallable (E:\Programme\node.js\node_modules\npm\lib\install\validate-args.js:38:3)
+40 verbose stack     at Array.<anonymous> (E:\Programme\node.js\node_modules\npm\node_modules\slide\lib\bind-actor.js:15:8)
+40 verbose stack     at LOOP (E:\Programme\node.js\node_modules\npm\node_modules\slide\lib\chain.js:15:14)
+40 verbose stack     at E:\Programme\node.js\node_modules\npm\node_modules\slide\lib\chain.js:18:7
+40 verbose stack     at checkSelf (E:\Programme\node.js\node_modules\npm\lib\install\validate-args.js:46:72)
+40 verbose stack     at Array.<anonymous> (E:\Programme\node.js\node_modules\npm\node_modules\slide\lib\bind-actor.js:15:8)
+41 verbose pkgid n@9.0.0
+42 verbose cwd G:\Dokumente\Programme\Pathfinding-Visualizer-App
+43 error Windows_NT 10.0.19043
+44 error argv "E:\\Programme\\node.js\\node.exe" "E:\\Programme\\node.js\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "n"
+45 error node v6.11.4
+46 error npm  v3.10.10
+47 error code EBADPLATFORM
+48 error notsup Unsupported platform for n@9.0.0: wanted {"os":"!win32","arch":"any"} (current: {"os":"win32","arch":"x64"})
+49 error notsup Valid OS:    !win32
+49 error notsup Valid Arch:  any
+49 error notsup Actual OS:   win32
+49 error notsup Actual Arch: x64
+50 verbose exit [ 1, true ]
