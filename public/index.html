@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Web site created using create-snowpack-app" />
-    <link rel="stylesheet" type="text/css" href="/index.css" />
-    <title>Snowpack App</title>
-  </head>
-  <body>
-    <img id="img" src="/logo.svg" />
-    <canvas id="canvas"></canvas>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>PATHFINDING</h1>
+    <div id="grid-container"></div>
+
+    <button id="start-btn">Start Algorithm</button>
+    <button id="stop-btn" style="display: none;">Stop Algorithm</button>
+    
+    <input id="speed-slider" type="range" min="0.1" max="1000" value="250">
+    <select name="algorithm-selection" id="algorithm-selection">
+        <option value="depth-first-search">Depth First Search</option>
+        <option value="breadth-first-search">Breadth First Search</option>
+        <option value="greedy-search">Greedy Search</option>
+        <option value="universal-cost-search">Universal Cost Search</option>
+        <option value="a-star">A*</option>
+    </select>
+
     <script type="module" src="/dist/index.js"></script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    <script type="module" src="/dist/depth_first_search.js"></script>
+</body>
 </html>
