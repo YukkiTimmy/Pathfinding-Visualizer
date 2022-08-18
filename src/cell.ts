@@ -44,9 +44,14 @@ export class Cell {
         let lastExpandedCell = document.getElementById("current");        
         lastExpandedCell?.removeAttribute("id");
         
-        if (!this.isStart || !this.isEnd)
-            this.div?.setAttribute("id", "current");
-        this.div?.classList.replace("grid-cell-candidate", "grid-cell-explored");
+
+        if (!this.isStart) {
+            if (this.div?.getAttribute("id") != "end")
+                this.div?.setAttribute("id", "current");
+            this.div?.classList.replace("grid-cell-candidate", "grid-cell-explored");
+        }
+            
+
 
 
         let nextCells : Cell[] = [];
@@ -62,7 +67,7 @@ export class Cell {
                 if (!grid[dy][dx].isWall) {
                     nextCells.push(new Cell(dx, dy, this));
                     grid[dy][dx].div?.classList.add("grid-cell-candidate");
-                } 
+                }   
             }
         }
 
@@ -72,5 +77,13 @@ export class Cell {
 
     calcDistance(endCell : Cell) {
         return Math.abs(this.x - endCell.x) + Math.abs(this.y - endCell.y);
+    }
+
+    toggleWall() {
+        this.isWall = !this.isWall;
+        if (this.isWall) 
+            this.div!.classList.add("grid-cell-wall");
+        else
+            this.div!.classList.remove("grid-cell-wall");
     }
 }

@@ -16,8 +16,8 @@ html, body {
 
 @keyframes popIn {
     0% {scale: 1; transform: rotate(0);}
-    50% {scale: 1.5; transform: rotate(90deg);}
-    10% {scale: 1; transform: rotate(180deg);}
+    50% {scale: 1.6; transform: rotate(180deg);}
+    10% {scale: 1; transform: rotate(360deg);}
 }
 
 .grid-cell {
@@ -26,12 +26,20 @@ html, body {
     height: 20px;
     background-color: aliceblue;
     outline: 1px solid black;
+    cursor: cell;
 
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 
 .grid-cell-wall {
     background-color: #333;
+    animation: popIn;
+    animation-duration: 0.5s;
 }
 
 
@@ -39,18 +47,27 @@ html, body {
     background-color: coral;
     animation: popIn;
     animation-duration: 0.5s;
-    z-index: 1;
 }
 
 .grid-cell-explored {
     background-color: cornflowerblue;
     animation: popIn;
     animation-duration: 0.5s;
-    z-index: 2;
+}
+
+.grid-cell-path {
+    background-color: yellow;
+    animation: popIn;
+    animation-duration: 0.5s;
 }
 
 #start {
     background-color: greenyellow;
+    -webkit-user-drag: auto;
+    user-select: auto;
+    -moz-user-select: auto;
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
 }
 
 #end {
@@ -59,15 +76,17 @@ html, body {
 
 #current {
     background-color: blueviolet;
+    z-index: 2;
 }
 
 
 
 button {
-    display: block;
+    display: inline;
     margin: auto;
     margin-top: 1em;
     width: 10em;
     height: 3em;
+    cursor: pointer;
 }
 

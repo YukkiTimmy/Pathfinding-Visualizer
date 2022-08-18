@@ -1,26 +1,30 @@
 import type { Cell } from "./cell";
-import { stop } from "./index";
+import { stop, sleep, getPath } from "./index";
+
 
 type Nullable<T> = T | null;
 
 
-export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
+export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) {
     if (startCell == null || endCell == null) return null;
+    
+    
     
     let stack : Cell[] = [];
     let explored : Cell[] = [];
-
+    
     stack.unshift(startCell!);
     explored.push(startCell!);
-
+    
     let finalCell : Nullable<Cell> = null;
     
-    var waitTill : Nullable<Date> = null;
+    
+    while(stack.length > 0 && finalCell == null ) {
+        if(stop) {
+            return null;
+        }
+        if (speed > 0) await sleep(speed);
 
-    while(finalCell == undefined) {
-        if(stop) return null;
-        
-        await sleep(speed);
         
         let currentCell = stack.shift()
         
@@ -55,11 +59,6 @@ export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell
     console.log("Lösung gefunden");
     console.log(finalCell);
 
-    return finalCell;
+    getPath(finalCell);
 }
 
-function sleep(ms : number) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}

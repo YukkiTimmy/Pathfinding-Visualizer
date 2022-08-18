@@ -4,9 +4,12 @@ import { breadFirstSearch} from "./breadth_first_search";
 import { greedySearch } from "./greedy_search";
 import { uniformCostSearch } from "./uniform_cost_search";
 import { aStar } from "./astar";
+import { randomizedPrimeAlgorithm } from "./randomized_prime_algorithm";
 
-const WIDTH : number = 40;
-const HEIGHT : number = 25;
+const STARTWIDTH : number = 45
+var WIDTH : number = STARTWIDTH;
+const STARTHEIGHT : number = 30;
+var HEIGHT : number = STARTHEIGHT;
 const CELLDIM : number = 20;
 
 type Nullable<T> = T | null;
@@ -15,6 +18,14 @@ export var startCell : Nullable<Cell> = null;
 export var endCell : Nullable<Cell> = null;
 
 export var stop : boolean = false;
+
+var clickType : Nullable<String> = null;
+
+
+
+document.addEventListener("mousedown", setPrimaryButtonState);
+document.addEventListener("mousemove", setPrimaryButtonState);
+document.addEventListener("mouseup", setPrimaryButtonState);
 
 
 function init() {
@@ -25,62 +36,86 @@ function init() {
     setUpGrid(grid);
 
     // Set the start and end Cells
-    startCell = setStartCell(grid, 5, 12);
-    endCell = setEndCell(grid, 15, 12);
+    startCell = setStartCell(grid, WIDTH - WIDTH + 3, Math.floor(HEIGHT / 2));
+    endCell = setEndCell(grid, WIDTH - 3, Math.floor(HEIGHT / 2));
 
 
+    // Get the diffrent buttons
     const startBtn = document.getElementById("start-btn");
     const stopBtn = document.getElementById("stop-btn");
-    let speedSlider = document.getElementById("speed-slider")  as HTMLInputElement;
-    let algorithmSelector = document.getElementById("algorithm-selection") as HTMLSelectElement;
+    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
+    const algorithmSelector = document.getElementById("algorithm-selection") as HTMLSelectElement;
+    const widthSlider = document.getElementById("width-slider") as HTMLInputElement;
+    const heightSlider = document.getElementById("height-slider") as HTMLInputElement;
+    const defaultDimBtn = document.getElementById("default-dim-btn") as HTMLInputElement;
 
-    var lastCell : Promise<Nullable<Cell>>;
 
-    startBtn?.addEventListener('click', e => {
+    startBtn?.addEventListener('click', e => {    
+        resetGrid(grid);
+        
         let selection = algorithmSelector.options[algorithmSelector.selectedIndex];
         
         startBtn.style.display = "none";
-        stopBtn!.style.display = "block";
+        stopBtn!.style.display = "inline";
 
         if (selection.value == "depth-first-search")
-            lastCell = depthFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+            depthFirstSearch(grid, startCell, endCell, +speedSlider!.value);
         else if (selection.value == "breadth-first-search")
-            lastCell = breadFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+            breadFirstSearch(grid, startCell, endCell, +speedSlider!.value);
         else if (selection.value == "greedy-search")
-            lastCell = greedySearch(grid, startCell, endCell, +speedSlider!.value);
+            greedySearch(grid, startCell, endCell, +speedSlider!.value);
         else if (selection.value == "uniform-cost-search")
-            lastCell = uniformCostSearch(grid, startCell, endCell, +speedSlider!.value);
+            uniformCostSearch(grid, startCell, endCell, +speedSlider!.value);
         else if (selection.value == "a-star")
-            lastCell = aStar(grid, startCell, endCell, +speedSlider!.value);
+            aStar(grid, startCell, endCell, +speedSlider!.value);
         else
             console.log("ERROR");
-
-        lastCell.then(value => {
-            getPath(value!);
-        });
+        
     });
+
     
+
+    // stop function
     stopBtn?.addEventListener('click', e => {
-        startBtn!.style.display = "block";
+        startBtn!.style.display = "inline";
         stopBtn.style.display = "none";
-        setStop();
+        stop = false;
         resetGrid(grid);
     });
 
 
-    
-    document.addEventListener("mousedown", setPrimaryButtonState);
-    document.addEventListener("mousemove", setPrimaryButtonState);
-    document.addEventListener("mouseup", setPrimaryButtonState);
+    // generate Labyrinth
+    const generateButton = document.getElementById("generate-btn");
+    generateButton?.addEventListener('click', e => {
+        startCell!.isStart = false;
+        startCell?.div?.removeAttribute("id");
+        endCell!.isStart = false;
+        endCell?.div?.removeAttribute("id");
+        randomizedPrimeAlgorithm(grid);
 
+        startBtn!.style.display = "inline";
+        stopBtn!.style.display = "none";
+        resetGrid(grid);
+    });
+
+
+
+    // Dimensions
+    heightSlider.onchange = function() {
+        grid = hardResetGrid(grid);
+    }
+
+    widthSlider.onchange = function() {
+        grid = hardResetGrid(grid);
+    }
+
+    defaultDimBtn.addEventListener('click', e => {
+        widthSlider.value = STARTWIDTH.toString();
+        heightSlider.value = STARTHEIGHT.toString();
+        grid = hardResetGrid(grid);
+    });
 }
 
-var primaryMouseButtonDown = false;
-
-function setPrimaryButtonState(e : MouseEvent) {
-  var flags = e.buttons !== undefined ? e.buttons : e.which;
-  primaryMouseButtonDown = (flags & 1) === 1;
-}
 
 function initCellArray() : Cell[][] {
     let grid : Cell[][] = [];
@@ -108,7 +143,7 @@ function setUpGrid(grid : Cell[][]) {
 
     gridContainer.style.gridTemplateColumns = 'repeat(' + WIDTH + ', ' + CELLDIM + 'px)';
     gridContainer.style.gridTemplateRows = 'repeat(' + HEIGHT + ', ' + CELLDIM + 'px)';
-    
+
 
     for (let y = 0; y < HEIGHT; y++) {        
         for (let x = 0; x < WIDTH; x++) {
@@ -123,6 +158,14 @@ function setUpGrid(grid : Cell[][]) {
             
             if(grid[y][x].isWall) 
                 gridCell.classList.add("grid-cell-wall");
+            
+            gridCell.addEventListener('mousedown', e => {
+                gridCellClicked(gridCell, grid);
+            });
+
+            gridCell.addEventListener('mouseup', e => {
+                clickType = null;
+            });
 
             gridCell.addEventListener('mouseover', e => {
                 if (primaryMouseButtonDown)
@@ -140,7 +183,7 @@ function resetGrid(grid : Cell[][]) {
         for (let i = 0; i < children?.length; i++) {
             if (children[i].classList.contains("grid-cell-explored")) children[i].classList.remove("grid-cell-explored");
             if (children[i].classList.contains("grid-cell-candidate")) children[i].classList.remove("grid-cell-candidate");
-
+            if (children[i].classList.contains("grid-cell-path"))  children[i].classList.remove("grid-cell-path");
         }
 
    
@@ -148,55 +191,132 @@ function resetGrid(grid : Cell[][]) {
 
 }
 
+function hardResetGrid(grid : Cell[][]) : Cell[][] {
+    const widthSlider = document.getElementById("width-slider") as HTMLInputElement;
+    const heightSlider = document.getElementById("height-slider") as HTMLInputElement;
+
+    const gridContainer = document.getElementById("grid-container");
+    gridContainer?.remove();
+
+    const gridBase = document.getElementById("grid-base");
+
+    let newGridContainer= document.createElement("div");
+    newGridContainer.setAttribute("id", "grid-container");
+
+    gridBase?.appendChild(newGridContainer);
+
+    WIDTH = +widthSlider.value;
+    HEIGHT = +heightSlider.value;
+
+    grid = initCellArray();
+    setUpGrid(grid);
+
+    startCell = setStartCell(grid, WIDTH - WIDTH + 3, Math.floor(HEIGHT / 2));
+    endCell = setEndCell(grid, WIDTH - 3, Math.floor(HEIGHT / 2));
+
+    return grid;
+}
 
 
+
+// check for mouse1 press
+var primaryMouseButtonDown = false;
+
+function setPrimaryButtonState(e : MouseEvent) {
+  var flags = e.buttons !== undefined ? e.buttons : e.which;
+  primaryMouseButtonDown = (flags & 1) === 1;
+}
+
+
+// grid cell was clicked
 function gridCellClicked(div : HTMLDivElement, grid : Cell[][]) {
+    // get the cell via the coresponding coordinates
     let x : number = +div.getAttribute("data-x")!;
     let y : number = +div.getAttribute("data-y")!;
     
     let gridCell : Cell = grid[y][x];
+    
 
+    // check what tile type was clicked e.g. "WALL"
+    if (clickType == null) {
+        if (gridCell.isWall) clickType = "wall";
+        else clickType = "clear";
+    }
+
+    // check for overwriting the start and end cell
     if (gridCell.isStart || gridCell.isEnd) return;
 
-    gridCell.isWall = !gridCell.isWall;
-    
-    if (gridCell.isWall) 
-        div.classList.add("grid-cell-wall");
-    else
-        div.classList.remove("grid-cell-wall");
-
-    // console.log(gridCell)
+    // toggle the wall
+    if (gridCell.isWall && clickType == "wall" || !gridCell.isWall && clickType == "clear")
+        gridCell.toggleWall();
 
 }
 
 
-
-function setStartCell(grid : Cell[][], x : number, y : number) : Cell{
+// set the startCell to x, y 
+export function setStartCell(grid : Cell[][], x : number, y : number) : Cell{
     grid[y][x].isStart = true;
     grid[y][x].div?.setAttribute("id", "start");
+    startCell = grid[y][x];
     return grid[y][x];
 }
 
-function setEndCell(grid : Cell[][], x : number, y : number) : Cell {
+// set the endCell to x, y
+export function setEndCell(grid : Cell[][], x : number, y : number) : Cell {
     grid[y][x].isEnd = true;
     grid[y][x].div?.setAttribute("id", "end");
+    endCell = grid[y][x];
     return grid[y][x];
 }
 
 
+// calculate the path from the endCell
+export function getPath(lastCell : Cell) {
+    if (lastCell == null) {
+        alert("No solution found!")
+        return;
+    }
+
+    let path : Cell[] = [];
+
+    // loop through every cell and add it to the array
+    while(lastCell.previous != null) {
+        path.push(lastCell);
+        lastCell = lastCell.previous;
+    }
+    // reverse the array
+    path.reverse();
+
+    animatePath(path);
+}
+
+
+// animates the path from start to end
+async function animatePath(path : Cell[]) {
+    document.getElementById("current")?.removeAttribute("id");
+
+    for(let i = 0; i < path.length; i++) {
+        await sleep(1);
+        path[i].div?.classList.replace("grid-cell-explored", "grid-cell-path");
+    }
+
+    document.getElementById("start-btn")!.style.display = "inline";
+    document.getElementById("stop-btn")!.style.display = "none";
+    stop = false;
+}
+
+// stop the functions
 function setStop() {
     stop = true;
 }
 
 
-
-function getPath(lastCell : Cell) {
-    let path : Cell[] = [];
-    while(lastCell.previous != null) {
-        path.push(lastCell);
-        lastCell = lastCell.previous;
-    }
-    path.reverse();
+// wait for x ms
+export function sleep(ms : number) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }
+
 
 init();
