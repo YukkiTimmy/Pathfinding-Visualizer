@@ -32,6 +32,8 @@ html, body {
 
 .grid-cell-wall {
     background-color: #333;
+    animation: popIn;
+    animation-duration: 0.5s;
 }
 
 

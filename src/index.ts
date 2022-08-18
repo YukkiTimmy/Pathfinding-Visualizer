@@ -1,9 +1,9 @@
 
 import { Cell } from "./cell";
-import { depthFirstSearch, setStop } from "./depth_first_search";
+import { depthFirstSearch } from "./depth_first_search";
 import { breadFirstSearch} from "./breadth_first_search";
 import { greedySearch } from "./greedy_search";
-import { universalCostSearch } from "./universal_cost_search";
+import { uniformCostSearch } from "./uniform_cost_search";
 import { aStar } from "./astar";
 
 const WIDTH : number = 40;
@@ -15,11 +15,17 @@ type Nullable<T> = T | null;
 export var startCell : Nullable<Cell> = null;
 export var endCell : Nullable<Cell> = null;
 
+export var stop : boolean = false;
+
 
 function init() {
+    // Set up an empty array of Cells
     let grid = initCellArray();
+
+    // Set up the grid of divs
     setUpGrid(grid);
 
+    // Set the start and end Cells
     startCell = setStartCell(grid, 5, 12);
     endCell = setEndCell(grid, 15, 12);
 
@@ -29,30 +35,30 @@ function init() {
     let speedSlider = document.getElementById("speed-slider")  as HTMLInputElement;
     let algorithmSelector = document.getElementById("algorithm-selection") as HTMLSelectElement;
 
+    var lastCell : Promise<Nullable<Cell>>;
 
     startBtn?.addEventListener('click', e => {
         let selection = algorithmSelector.options[algorithmSelector.selectedIndex];
-
-        if (selection.value == "depth-first-search")
-            depthFirstSearch(grid, startCell, endCell, +speedSlider!.value);
-        else if (selection.value == "breadth-first-search")
-            breadFirstSearch(grid, startCell, endCell, +speedSlider!.value);
-        else if (selection.value == "greedy-search")
-            greedySearch(grid, startCell, endCell, +speedSlider!.value);
-        else if (selection.value == "universal-cost-search")
-            universalCostSearch(grid, startCell, endCell, +speedSlider!.value);
-        else if (selection.value == "a-star")
-            aStar(grid, startCell, endCell, +speedSlider!.value);
-        else
-            console.log("ERROR");
-
-
-        console.log(selection.value);
-
+        
         startBtn.style.display = "none";
         stopBtn!.style.display = "block";
 
-   
+        if (selection.value == "depth-first-search")
+            lastCell = depthFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+        else if (selection.value == "breadth-first-search")
+            lastCell = breadFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+        else if (selection.value == "greedy-search")
+            lastCell = greedySearch(grid, startCell, endCell, +speedSlider!.value);
+        else if (selection.value == "uniform-cost-search")
+            lastCell = uniformCostSearch(grid, startCell, endCell, +speedSlider!.value);
+        else if (selection.value == "a-star")
+            lastCell = aStar(grid, startCell, endCell, +speedSlider!.value);
+        else
+            console.log("ERROR");
+
+        lastCell.then(value => {
+            getPath(value!);
+        });
     });
     
     stopBtn?.addEventListener('click', e => {
@@ -86,8 +92,6 @@ function initCellArray() : Cell[][] {
         for (let x = 0; x < WIDTH; x++) {
             let tmpCell : Cell = new Cell(x, y, undefined);
             
-            // if (Math.random() > 0.8) tmpCell.setIsWall(true);
-
             grid[y][x] = tmpCell;
         }
     }
@@ -113,6 +117,7 @@ function setUpGrid(grid : Cell[][]) {
             gridCell.classList.add("grid-cell");
             gridCell.setAttribute("data-x", x.toString());
             gridCell.setAttribute("data-y", y.toString());
+            gridCell.setAttribute("id", " ");
             
             gridContainer?.appendChild(gridCell);
             grid[y][x].div = gridCell;
@@ -161,7 +166,7 @@ function gridCellClicked(div : HTMLDivElement, grid : Cell[][]) {
     else
         div.classList.remove("grid-cell-wall");
 
-    console.log(gridCell)
+    // console.log(gridCell)
 
 }
 
@@ -179,6 +184,21 @@ function setEndCell(grid : Cell[][], x : number, y : number) : Cell {
     return grid[y][x];
 }
 
+
+function setStop() {
+    stop = true;
+}
+
+
+
+function getPath(lastCell : Cell) {
+    let path : Cell[] = [];
+    while(lastCell.previous != null) {
+        path.push(lastCell);
+        lastCell = lastCell.previous;
+    }
+    path.reverse();
+}
 
 
 init();

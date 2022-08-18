@@ -1,9 +1,8 @@
 
 import type { Cell } from "./cell";
+import { stop } from "./index";
 
 type Nullable<T> = T | null;
-
-var stop = false;
 
 
 export async function breadFirstSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
@@ -23,7 +22,6 @@ export async function breadFirstSearch(grid: Cell[][], startCell : Nullable<Cell
         
         
         let currentCell = queue.shift()
-        currentCell?.div?.setAttribute("id", "current");
         await sleep(speed);
         
         if (currentCell == null) return null;
@@ -46,8 +44,6 @@ export async function breadFirstSearch(grid: Cell[][], startCell : Nullable<Cell
             } 
             
         });
-
-        currentCell?.div?.setAttribute("id", "");
     }
     
 
@@ -66,8 +62,4 @@ function sleep(ms : number) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
-}
-
-export function setStop() {
-    stop = true;
 }

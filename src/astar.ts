@@ -1,9 +1,8 @@
 
 import type { Cell } from "./cell";
+import { stop } from "./index";
 
 type Nullable<T> = T | null;
-
-var stop = false;
 
 
 export async function aStar(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
@@ -61,8 +60,6 @@ export async function aStar(grid: Cell[][], startCell : Nullable<Cell>, endCell 
         openList.sort((a , b ) => {
             return a.costs - b.costs;
         })
-
-        currentCell?.div?.setAttribute("id", "");
     }
     
 
@@ -81,8 +78,4 @@ function sleep(ms : number) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
-}
-
-export function setStop() {
-    stop = true;
 }
