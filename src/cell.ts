@@ -13,7 +13,7 @@ export class Cell {
         this.y = y;
         this.previous = previous;
     
-
+        
         this.costs = 0;
         this.isWall = false;
         this.isStart = false;
@@ -33,16 +33,26 @@ export class Cell {
         this.isEnd = isEnd;
     }
 
-    setDiv( div: HTMLDivElement) {
+    setDiv(div: HTMLDivElement) {
         this.div = div;
     }
 
 
     expand(grid : Cell[][]) : Cell[] {
-        let nextCells : Cell[] = [];
+        this.div = grid[this.y][this.x].div;
+        
+        let lastExpandedCell = document.getElementById("current");        
+        lastExpandedCell?.removeAttribute("id");
+        
+        if (!this.isStart || !this.isEnd)
+            this.div?.setAttribute("id", "current");
+        this.div?.classList.replace("grid-cell-candidate", "grid-cell-explored");
 
+
+        let nextCells : Cell[] = [];
+        
         let dirX = [-1, 0, 1, 0];
-        let dirY = [0, -1, 0, 1];
+        let dirY = [0, 1, 0, -1];
 
         for (let i = 0; i < 4; i++) {
             let dx = dirX[i] + this.x;
@@ -52,8 +62,6 @@ export class Cell {
                 if (!grid[dy][dx].isWall) {
                     nextCells.push(new Cell(dx, dy, this));
                     grid[dy][dx].div?.classList.add("grid-cell-candidate");
-                    // if (this.previous != null)
-                    //     grid[this.previous.y][this.previous.x].div?.classList.replace( "grid-cell-candidate", "grid-cell-explored");
                 } 
             }
         }
@@ -65,5 +73,4 @@ export class Cell {
     calcDistance(endCell : Cell) {
         return Math.abs(this.x - endCell.x) + Math.abs(this.y - endCell.y);
     }
-
 }

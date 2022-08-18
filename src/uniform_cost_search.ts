@@ -1,58 +1,56 @@
+
 import type { Cell } from "./cell";
 import { stop } from "./index";
 
 type Nullable<T> = T | null;
 
 
-export async function aStar(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
+export async function uniformCostSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
     if (startCell == null || endCell == null) return null;
     
     let openList : Cell[] = [];
     let closedList : Cell[] = [];
 
-
-    startCell.costs = 0;
     openList.push(startCell!);
 
-    
     let finalCell : Nullable<Cell> = null;
     
-
+    
     while(finalCell == undefined) {
         if(stop) return null;
         await sleep(speed);
         
-        let currentCell : Cell = openList.reduce(function(prev, current) {
-            return (prev.costs < current.costs) ? prev : current
-        });
-
-        openList = openList.filter(obj => {return obj !== currentCell});
-
         
-        console.log(currentCell);
-
+        
+        let currentCell = openList.shift()
+        
         if (currentCell == null) return null;
         if (currentCell.x == endCell.x && currentCell.y == endCell.y) finalCell = currentCell;
         
+        currentCell.costs = currentCell.calcDistance(endCell);
         closedList.push(currentCell);
-
-
+        
+        
+        
+        
         currentCell?.expand(grid).forEach(element => {
-            element.costs = element.costs + element.calcDistance(endCell);
-
-
             let cellAlreadyExplored = false;
+            element.costs = element.calcDistance(endCell);
+
             for (let i = 0; i < closedList.length; i++)
                 if (closedList[i].x == element.x && closedList[i].y == element.y)
                     cellAlreadyExplored = true;
-                
+            
+            for (let i = 0; i < openList.length; i++)
+                if (openList[i].x == element.x && openList[i].y == element.y)
+                    cellAlreadyExplored = true;
 
     
     
-            if (!cellAlreadyExplored) {
+            if (!cellAlreadyExplored)
                 openList.push(element);
-                closedList.push(element);
-            }
+            else if(element.costs < currentCell!.costs)
+                currentCell = element;
             
         });
 

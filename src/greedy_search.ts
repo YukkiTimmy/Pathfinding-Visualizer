@@ -1,9 +1,7 @@
-
 import type { Cell } from "./cell";
+import { stop } from "./index";
 
 type Nullable<T> = T | null;
-
-var stop = false;
 
 
 export async function greedySearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) : Promise<Nullable<Cell>> {
@@ -23,7 +21,6 @@ export async function greedySearch(grid: Cell[][], startCell : Nullable<Cell>, e
         
         
         let currentCell = openList.shift()
-        currentCell?.div?.setAttribute("id", "current");
         await sleep(speed);
         
         if (currentCell == null) return null;
@@ -51,8 +48,6 @@ export async function greedySearch(grid: Cell[][], startCell : Nullable<Cell>, e
         openList.sort((a , b ) => {
             return a.costs - b.costs;
         })
-
-        currentCell?.div?.setAttribute("id", "");
     }
     
 
@@ -71,8 +66,4 @@ function sleep(ms : number) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
-}
-
-export function setStop() {
-    stop = true;
 }
