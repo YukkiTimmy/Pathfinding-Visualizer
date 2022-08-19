@@ -271,7 +271,7 @@ export function setEndCell(grid : Cell[][], x : number, y : number) : Cell {
 
 
 // calculate the path from the endCell
-export function getPath(lastCell : Cell) {
+export function getPath(lastCell : Nullable<Cell>) {
     if (lastCell == null) {
         alert("No solution found!")
         return;
