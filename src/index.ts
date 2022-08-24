@@ -1,10 +1,18 @@
 import { Cell } from "./cell";
-import { depthFirstSearch } from "./depth_first_search";
-import { breadFirstSearch} from "./breadth_first_search";
-import { greedySearch } from "./greedy_search";
-import { uniformCostSearch } from "./uniform_cost_search";
-import { aStar } from "./astar";
+
+// Algorithms
+import { depthFirstSearch } from "./graph-search-algorithms/depth_first_search";
+import { breadFirstSearch} from "./graph-search-algorithms/breadth_first_search";
+import { greedySearch } from "./graph-search-algorithms/greedy_search";
+import { uniformCostSearch } from "./graph-search-algorithms/uniform_cost_search";
+import { dijkstra } from "./graph-search-algorithms/dijkstra";
+import { aStar } from "./graph-search-algorithms/astar";
+import { randomWalk } from "./graph-search-algorithms/random_walk";
+import { randomNext } from "./graph-search-algorithms/random_next";
+
+// Labyrinth Generator
 import { randomizedPrimeAlgorithm } from "./randomized_prime_algorithm";
+
 
 const STARTWIDTH : number = 45
 var WIDTH : number = STARTWIDTH;
@@ -23,14 +31,14 @@ var clickType : Nullable<String> = null;
 
 
 
-document.addEventListener("mousedown", setPrimaryButtonState);
-document.addEventListener("mousemove", setPrimaryButtonState);
-document.addEventListener("mouseup", setPrimaryButtonState);
+document.getElementById("grid-base")!.addEventListener("mousedown", setPrimaryButtonState);
+document.getElementById("grid-base")!.addEventListener("mousemove", setPrimaryButtonState);
+document.getElementById("grid-base")!.addEventListener("mouseup", setPrimaryButtonState);
 
 
 function init() {
     // Set up an empty array of Cells
-    let grid = initCellArray();
+    var grid = initCellArray();
 
     // Set up the grid of divs
     setUpGrid(grid);
@@ -43,15 +51,16 @@ function init() {
     // Get the diffrent buttons
     const startBtn = document.getElementById("start-btn");
     const stopBtn = document.getElementById("stop-btn");
-    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
+    const resetBtn = document.getElementById("reset-btn");
     const algorithmSelector = document.getElementById("algorithm-selection") as HTMLSelectElement;
     const widthSlider = document.getElementById("width-slider") as HTMLInputElement;
     const heightSlider = document.getElementById("height-slider") as HTMLInputElement;
     const defaultDimBtn = document.getElementById("default-dim-btn") as HTMLInputElement;
 
-
+    // start function
     startBtn?.addEventListener('click', e => {    
-        resetGrid(grid);
+        stop = false;
+        resetGrid();
         
         let selection = algorithmSelector.options[algorithmSelector.selectedIndex];
         
@@ -59,15 +68,21 @@ function init() {
         stopBtn!.style.display = "inline";
 
         if (selection.value == "depth-first-search")
-            depthFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+            depthFirstSearch(grid, startCell, endCell);
         else if (selection.value == "breadth-first-search")
-            breadFirstSearch(grid, startCell, endCell, +speedSlider!.value);
+            breadFirstSearch(grid, startCell, endCell);
         else if (selection.value == "greedy-search")
-            greedySearch(grid, startCell, endCell, +speedSlider!.value);
+            greedySearch(grid, startCell, endCell);
         else if (selection.value == "uniform-cost-search")
-            uniformCostSearch(grid, startCell, endCell, +speedSlider!.value);
+            uniformCostSearch(grid, startCell, endCell);
+        else if (selection.value == "dijkstra")
+            dijkstra(grid, startCell, endCell);
         else if (selection.value == "a-star")
-            aStar(grid, startCell, endCell, +speedSlider!.value);
+            aStar(grid, startCell, endCell);
+        else if (selection.value == "random-walk")
+            randomWalk(grid, startCell, endCell);
+        else if (selection.value == "random-next")
+            randomNext(grid, startCell, endCell);
         else
             console.log("ERROR");
         
@@ -79,10 +94,20 @@ function init() {
     stopBtn?.addEventListener('click', e => {
         startBtn!.style.display = "inline";
         stopBtn.style.display = "none";
-        stop = false;
-        resetGrid(grid);
+        setStop();
+        resetGrid();
     });
 
+
+    // reset Button
+    resetBtn?.addEventListener('click', e => {
+        startBtn!.style.display = "inline";
+        stopBtn!.style.display = "none";
+
+        if (!stop) setStop();
+        
+        resetGrid();
+    });
 
     // generate Labyrinth
     const generateButton = document.getElementById("generate-btn");
@@ -95,7 +120,7 @@ function init() {
 
         startBtn!.style.display = "inline";
         stopBtn!.style.display = "none";
-        resetGrid(grid);
+        resetGrid();
     });
 
 
@@ -114,6 +139,9 @@ function init() {
         heightSlider.value = STARTHEIGHT.toString();
         grid = hardResetGrid(grid);
     });
+
+
+
 }
 
 
@@ -175,8 +203,10 @@ function setUpGrid(grid : Cell[][]) {
     }
 }
 
-function resetGrid(grid : Cell[][]) {
+function resetGrid() {
     const gridContainer = document.getElementById("grid-container");
+
+    document.getElementById("current")?.removeAttribute("id");
 
     let children = gridContainer?.children;
     if(children)
@@ -186,9 +216,6 @@ function resetGrid(grid : Cell[][]) {
             if (children[i].classList.contains("grid-cell-path"))  children[i].classList.remove("grid-cell-path");
         }
 
-   
-   grid = initCellArray();
-
 }
 
 function hardResetGrid(grid : Cell[][]) : Cell[][] {
@@ -197,6 +224,9 @@ function hardResetGrid(grid : Cell[][]) : Cell[][] {
 
     const gridContainer = document.getElementById("grid-container");
     gridContainer?.remove();
+
+
+
 
     const gridBase = document.getElementById("grid-base");
 
@@ -223,8 +253,9 @@ function hardResetGrid(grid : Cell[][]) : Cell[][] {
 var primaryMouseButtonDown = false;
 
 function setPrimaryButtonState(e : MouseEvent) {
-  var flags = e.buttons !== undefined ? e.buttons : e.which;
-  primaryMouseButtonDown = (flags & 1) === 1;
+  var flags = e.buttons;
+  console.log(flags);
+  primaryMouseButtonDown = (flags && 1) === 1;
 }
 
 
@@ -272,6 +303,12 @@ export function setEndCell(grid : Cell[][], x : number, y : number) : Cell {
 
 // calculate the path from the endCell
 export function getPath(lastCell : Nullable<Cell>) {
+    if (stop) {
+        resetGrid();
+        stop = false;
+        return;
+    }
+    
     if (lastCell == null) {
         alert("No solution found!")
         return;
@@ -286,6 +323,8 @@ export function getPath(lastCell : Nullable<Cell>) {
     }
     // reverse the array
     path.reverse();
+
+    console.log("Path length: " + path.length);
 
     animatePath(path);
 }
@@ -309,6 +348,12 @@ async function animatePath(path : Cell[]) {
 function setStop() {
     stop = true;
 }
+
+
+export function getSpeed() : number {
+    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
+    return +speedSlider.value;
+} 
 
 
 // wait for x ms

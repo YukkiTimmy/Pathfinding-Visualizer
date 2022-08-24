@@ -1,38 +1,47 @@
-import type { Cell } from "./cell";
-import { stop, sleep, getPath } from "./index";
+import type { Cell } from "../cell";
+import { stop, sleep, getPath, getSpeed } from "../index";
 
 type Nullable<T> = T | null;
 
 
-export async function greedySearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) {
+export async function aStar(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>) {
     if (startCell == null || endCell == null) return null;
     
     let openList : Cell[] = [];
     let closedList : Cell[] = [];
 
-    openList.unshift(startCell!);
-    closedList.push(startCell!);
 
+    startCell.costs = 0;
+    openList.push(startCell!);
+
+    
     let finalCell : Nullable<Cell> = null;
     
 
     while(finalCell == undefined) {
-        if(stop) return null;
+        if(stop) return getPath(null);
         
-        if (speed > 0)
-            await sleep(speed);
-        
-        
-        
-        let currentCell = openList.shift()
+        let speed = getSpeed();
+        if (speed > 0) await sleep(speed);
+
+
+        let currentCell : Cell = openList.reduce(function(prev, current) {
+            return (prev.costs < current.costs) ? prev : current
+        });
+
+        openList = openList.filter(obj => {return obj !== currentCell});
+
         
         if (currentCell == null) return null;
-        if (currentCell.x == endCell.x && currentCell.y == endCell.y)
-            finalCell = currentCell;
+        if (currentCell.x == endCell.x && currentCell.y == endCell.y) finalCell = currentCell;
         
+        closedList.push(currentCell);
 
-            
+
         currentCell?.expand(grid).forEach(element => {
+            element.costs = element.costs + element.calcDistance(endCell);
+
+
             let cellAlreadyExplored = false;
             for (let i = 0; i < closedList.length; i++)
                 if (closedList[i].x == element.x && closedList[i].y == element.y)
@@ -42,7 +51,6 @@ export async function greedySearch(grid: Cell[][], startCell : Nullable<Cell>, e
     
     
             if (!cellAlreadyExplored) {
-                element.costs = element.calcDistance(endCell);
                 openList.push(element);
                 closedList.push(element);
             }

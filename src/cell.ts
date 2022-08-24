@@ -56,8 +56,8 @@ export class Cell {
 
         let nextCells : Cell[] = [];
         
-        let dirX = [-1, 0, 1, 0];
-        let dirY = [0, 1, 0, -1];
+        let dirX = [0, -1, 0, 1];
+        let dirY = [-1, 0, 1, 0];
 
         for (let i = 0; i < 4; i++) {
             let dx = dirX[i] + this.x;

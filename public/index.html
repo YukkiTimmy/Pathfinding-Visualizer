@@ -8,45 +8,128 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>PATHFINDING</h1>
-    <div id="grid-base">
-        <div id="grid-container"></div>
+    <div class="main">
+
+        <h1>PATHFINDING</h1>
+        <div id="grid-base">
+            <div id="grid-container"></div>
+        </div>
+    
+        <button id="start-btn">Start Algorithm</button>
+        <button id="stop-btn" style="display: none;">Stop Algorithm</button>
+        <button id="reset-btn">Reset</button>    
+    
+        <div id="settings">
+    
+            <div class="algorithm-settings">
+                <span>
+                    SPEED:
+                    <input id="speed-slider" type="range" min="0" max="1000" value="250">
+                </span>
+                <select name="algorithm-selection" id="algorithm-selection">
+                    <option value="depth-first-search">Depth First Search</option>
+                    <option value="breadth-first-search">Breadth First Search</option>
+                    <option value="greedy-search">Greedy Search</option>
+                    <option value="uniform-cost-search">Uniform Cost Search</option>
+                    <option value="dijkstra">Dijkstra</option>
+                    <option value="a-star">A*</option>
+                    <option value="random-walk">Random Walk</option>
+                    <option value="random-next">Random Next</option>
+                </select>
+            </div>
+            
+            <div id="grid-settings">
+                <span>
+                    WIDTH:
+                    <input id="width-slider" type="range" min="10" max="100" value="45">
+                </span>
+                <span>
+                    HEIGHT:
+                    <input id="height-slider" type="range" min="10" max="100" value="30">
+                </span>
+                <button id="default-dim-btn">default</button>
+            </div> 
+            
+            <div id="labyrinth-settings">
+                <button id="generate-btn">Generate Labyrinth</button>
+            </div>
+        </div>
     </div>
 
-    <button id="start-btn">Start Algorithm</button>
-    <button id="stop-btn" style="display: none;">Stop Algorithm</button>
-    
-    <span>
-        SPEED:
-        <input id="speed-slider" type="range" min="0" max="1000" value="250">
-    </span>
-    
-    <select name="algorithm-selection" id="algorithm-selection">
-        <option value="depth-first-search">Depth First Search</option>
-        <option value="breadth-first-search">Breadth First Search</option>
-        <option value="greedy-search">Greedy Search</option>
-        <option value="uniform-cost-search">Uniform Cost Search</option>
-        <option value="a-star">A*</option>
-    </select>
-    
-    <button id="generate-btn">Generate Labyrinth</button>
-    
-    <br>
-    <span>
-        WIDTH:
-        <input id="width-slider" type="range" min="10" max="100" value="45">
-    </span>
-    <span>
-        HEIGHT:
-        <input id="height-slider" type="range" min="10" max="100" value="30">
-    </span>
-    <button id="default-dim-btn">default</button>
+
+    <div id="info-tabs">
+        <div class="tab">
+            <button class="tablinks active" onclick="clickHandle('depth_first_search_info', 'depth_first_search_code', 'depth_first_search_pseudo')">Depth-first Search</button>
+            <button class="tablinks" onclick="clickHandle('Bear')">Bear</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+        </div>
+
+        <div id="tabcontent">
+            <div id="tabcontent-info">
+                <h3>Depth-first Search</h3>
+                <p id="tabcontent-info-text">
+
+                </p>
+            </div>
+
+            <div id="tabcontent-code">
+                <h3>Typescript Code</h3>
+                    <pre>
+                        <code id="tabcontent-code-text">
+                            
+                        </code>
+                    </pre>
+            </div>
+
+            <div id="tabcontent-pseudo">
+                <h3>Pseudo Code</h3>
+                <code id="tabcontent-pseudo-text">
+                </code>
+            </div>
 
 
+        </div>
+    </div>
 
-    
+    <script>
+        function clickHandle(text, code, pseudo) {
+            const tabcontent = document.getElementById("tabcontent");
+            const tabcontentInfoText = document.getElementById("tabcontent-info-text");
+            const tabcontentCodeText = document.getElementById("tabcontent-code-text");
+            const tabcontentPseudoText = document.getElementById("tabcontent-pseudo-text");
+
+            loadFile("../info_data/" + text + ".txt").then(function(result) {
+                tabcontentInfoText.innerHTML = result;
+            });
+
+            loadFile("../info_data/" + code + ".txt").then(function(result) {
+                tabcontentCodeText.innerHTML = result;
+            });
+
+            loadFile("../info_data/" + pseudo + ".txt").then(function(result) {
+                tabcontentPseudoText.innerHTML = result;
+            });
+
+
+        }
+
+
+        function loadFile(url) {
+            return fetch(url)
+            .then( r => r.text() )
+            .then( t => {
+                return t;
+            });
+        }
+        
+
+    </script>
 
     <script type="module" src="/dist/index.js"></script>
-    <script type="module" src="/dist/depth_first_search.js"></script>
 </body>
 </html>

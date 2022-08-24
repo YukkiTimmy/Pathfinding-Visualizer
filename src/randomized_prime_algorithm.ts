@@ -52,7 +52,7 @@ export async function randomizedPrimeAlgorithm(grid : Cell[][]) : Promise<Cell[]
             let dy = dirY[i] + nextCell.y;
 
             if (dx >= 0 && dx < maze[0].length && dy >= 0 && dy <= maze.length - 1) {
-                if (maze[dy][dx].isWall) {
+                if (maze[dy][dx].isWall || Math.random() < 0.02) {
                     maze[dy][dx].previous = nextCell;
                     frontier.push(maze[dy][dx]);
                 }   

@@ -1,38 +1,36 @@
-import type { Cell } from "./cell";
-import { stop, sleep, getPath } from "./index";
-
+import type { Cell } from "../cell";
+import { stop, sleep, getPath, getSpeed } from "../index";
 
 type Nullable<T> = T | null;
 
 
-export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>, speed : number) {
+export async function breadFirstSearch(grid: Cell[][], startCell : Nullable<Cell>, endCell : Nullable<Cell>) {
     if (startCell == null || endCell == null) return null;
     
-    
-    
-    let stack : Cell[] = [];
+    let queue : Cell[] = [];
     let explored : Cell[] = [];
-    
-    stack.unshift(startCell!);
+
+    queue.unshift(startCell!);
     explored.push(startCell!);
-    
+
     let finalCell : Nullable<Cell> = null;
     
-    
-    while(stack.length > 0 && finalCell == null ) {
-        if(stop) {
-            return null;
-        }
+
+    while(finalCell == undefined) {
+        if(stop) return getPath(null);
+        
+        let speed = getSpeed();
         if (speed > 0) await sleep(speed);
 
         
-        let currentCell = stack.shift()
+        let currentCell = queue.shift()
         
         if (currentCell == null) return null;
-
         if (currentCell.x == endCell.x && currentCell.y == endCell.y)
             finalCell = currentCell;
         
+
+
         currentCell?.expand(grid).forEach(element => {
             let cellAlreadyExplored = false;
             for (let i = 0; i < explored.length; i++)
@@ -43,7 +41,7 @@ export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell
     
     
             if (!cellAlreadyExplored) {
-                stack.unshift(element);
+                queue.push(element);
                 explored.push(element);
             } 
             
@@ -51,7 +49,7 @@ export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell
     }
     
 
-    console.log("STACK SIZE: " + stack.length);
+    console.log("STACK SIZE: " + queue.length);
     console.log("CLOSEDLIST SIZE: " + explored.length);
         
 
@@ -61,4 +59,3 @@ export async function depthFirstSearch(grid: Cell[][], startCell : Nullable<Cell
 
     getPath(finalCell);
 }
-
