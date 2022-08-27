@@ -1,135 +1,270 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme=''>
 <head>
+    <title>Pathfinding Visualizer - YukkiTimmy</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathfinding Visualizer - YukkiTimmy</title>
+    
     <link rel="stylesheet" href="./style.css">
+
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <div class="main">
+    <div id="sidebar">
+        <a href="https://yukkitimmy.itch.io/" id="sidebarImg">
+            <img src="./img/pb.png" alt="">
+            <!-- <span class="links_name">Setting</span> -->
+        </a>
 
-        <h1>PATHFINDING</h1>
-        <div id="grid-base">
-            <div id="grid-container"></div>
-        </div>
-    
-        <button id="start-btn">Start Algorithm</button>
-        <button id="stop-btn" style="display: none;">Stop Algorithm</button>
-        <button id="reset-btn">Reset</button>    
-    
-        <div id="settings">
-    
-            <div class="algorithm-settings">
-                <span>
-                    SPEED:
-                    <input id="speed-slider" type="range" min="0" max="1000" value="250">
-                </span>
-                <select name="algorithm-selection" id="algorithm-selection">
-                    <option value="depth-first-search">Depth First Search</option>
-                    <option value="breadth-first-search">Breadth First Search</option>
-                    <option value="greedy-search">Greedy Search</option>
-                    <option value="uniform-cost-search">Uniform Cost Search</option>
-                    <option value="dijkstra">Dijkstra</option>
-                    <option value="a-star">A*</option>
-                    <option value="random-walk">Random Walk</option>
-                    <option value="random-next">Random Next</option>
-                </select>
-            </div>
+        <hr class="sidebarSep">
+
+        <ul>
+            <li>
+                <a href="#main">
+                    <i class='material-symbols-outlined'>home</i>
+                </a>
+                <span class="tooltip">home</span>
+            </li>
             
-            <div id="grid-settings">
-                <span>
-                    WIDTH:
-                    <input id="width-slider" type="range" min="10" max="100" value="45">
-                </span>
-                <span>
-                    HEIGHT:
-                    <input id="height-slider" type="range" min="10" max="100" value="30">
-                </span>
-                <button id="default-dim-btn">default</button>
-            </div> 
-            
-            <div id="labyrinth-settings">
-                <button id="generate-btn">Generate Labyrinth</button>
+            <li>
+                <a href="#info-tabs">
+                    <i class='material-symbols-outlined'>school</i>
+                </a>
+                <span class="tooltip">how do they work?</span>
+            </li>
+            <li>
+                <a href="#about">
+                    <i class='material-symbols-outlined'>info</i>
+                </a>
+                <span class="tooltip">about this side</span>
+            </li>
+
+            <hr class="sidebarSep">
+
+            <li>
+                <a id="settings-btn">
+                    <i class='material-symbols-outlined'>settings</i>
+                </a>
+                <span class="tooltip">settings</span>
+            </li>
+
+            <li>
+                <a id="generate-btn">
+                    <img src="https://th.bing.com/th/id/R.53b7d38ea74c39e7c54b267e8cc53a7a?rik=FdRy6Wv1JdVF3Q&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_557148.png&ehk=DW1iOm8zLohORsfd7dSJe1lIGSwopdN%2fv3uXaonD0YQ%3d&risl=&pid=ImgRaw&r=0" alt="">
+                </a>
+                <span class="tooltip">maze</span>
+            </li>
+
+            <li>
+                <a href="#help">
+                    <i class='material-symbols-outlined'>help</i>
+                </a>
+                <span class="tooltip">help</span>
+            </li>
+
+            <hr class="sidebarSep">
+
+        </ul>
+
+        
+        
+        <div id="lower-sidebar">
+
+            <li>
+                <a href="#imprint">
+                    <i class='material-symbols-outlined'>format_paragraph</i>
+                </a>
+                <span class="tooltip">imprint</span>
+            </li>
+
+            <hr class="sidebarSep">
+            <div class="lower-sidebar-item">
+                <i class='material-symbols-outlined'>dark_mode</i>
+                <input type="checkbox" name="darkmode" id="darkmode" class="toggleButton">
+                <label for="darkmode"></label>
             </div>
         </div>
     </div>
 
 
-    <div id="info-tabs">
-        <div class="tab">
-            <button class="tablinks active" onclick="clickHandle('depth_first_search_info', 'depth_first_search_code', 'depth_first_search_pseudo')">Depth-first Search</button>
-            <button class="tablinks" onclick="clickHandle('Bear')">Bear</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
-            <button class="tablinks" onclick="clickHandle('Dog')">Dog</button>
+
+    
+    <div id="settings-menu" style="width: 0px;">
+        <a id="close-settings"><i class='material-symbols-outlined'>close</i></a>
+        <h2>GRID SETTINGS</h2>
+        
+        <hr class="sidebarSep">
+
+        <div class="settings-menu-item">
+            <span>WIDTH:</span>
+            <input id="width-slider"  class="slider" type="range" min="10" max="160" value="80">
+            <span>HEIGHT:</span>
+            <input id="height-slider" class="slider" type="range" min="10" max="70" value="30">
         </div>
 
-        <div id="tabcontent">
-            <div id="tabcontent-info">
-                <h3>Depth-first Search</h3>
-                <p id="tabcontent-info-text">
+        <hr class="sidebarSep">
+        
+        <h2>ALGORITHM SETTINGS</h2>
+        <span>CLOSED LIST:
+            <input type="checkbox" name="closedlist" id="closedlist" class="toggleButton">
+            <label for="closedlist"></label>
+        </span>
 
-                </p>
+        <hr class="sidebarSep">
+
+        <div class="settings-menu-item">
+            <button id="default-dim-btn"><i class='material-symbols-outlined'>restart_alt</i></button>
+        </div>
+    </div>
+    
+
+
+
+    
+    
+    
+    <div id="main">
+        
+        <section id="grid">  
+            <h1>PATHFINDING VISUALIZER</h1>
+            <h4>by YukkiTimmy</h4>
+            
+            <select name="algorithm-selection" id="algorithm-selection">
+                <option value="depth-first-search">Depth First Search</option>
+                <option value="breadth-first-search">Breadth First Search</option>
+                <option value="greedy-search">Greedy Search</option>
+                <option value="uniform-cost-search">Uniform Cost Search</option>
+                <option value="dijkstra">Dijkstra</option>
+                <option value="a-star">A*</option>
+                <option value="random-walk">Random Walk</option>
+                <option value="random-next">Random Next</option>
+            </select>
+
+
+            <div id="grid-base">
+                <!-- holds the grid -->
+                <div id="grid-container"></div>
             </div>
 
-            <div id="tabcontent-code">
-                <h3>Typescript Code</h3>
+            
+            <div class="grid-controls">
+                <span id="control-btns">
+                    <a id="start-btn" class="control-btn"><i class='material-symbols-outlined'>play_arrow</i></a>
+                    <a id="stop-btn" style="display: none;" class="control-btn"><i class='material-symbols-outlined'>stop</i></a>
+                    
+                    <div class="speed-slider-container">
+                        <input id="speed-slider" class="slider" type="range" min="1" max="1000" value="250">
+                        <!-- <span id="speed-span">10</span> -->
+                        <input type="checkbox" name="instant" id="instant" class="toggleButton">
+                        <label for="instant"></label>
+
+                    </div>
+
+                    <a id="reset-btn" class="control-btn"><i class='material-symbols-outlined'>restart_alt</i></a>    
+                </span>
+
+
+            </div>
+
+    
+        </section>
+        
+
+        <section id="info-tabs">
+            <div class="tab">
+                <button class="tablinks active" onclick="clickHandle('depth_first_search_info', 'depth_first_search_code', 'depth_first_search_pseudo')">Depth-first Search</button>
+                <button class="tablinks" onclick="clickHandle('breadth_first_search_info', 'breadth_first_search_code', 'breadth_first_search_pseudo')">Breadth-first search</button>
+                <button class="tablinks" onclick="clickHandle('greedy_search_info', 'greedy_search_code', 'greedy_search_pseudo')">Greedy Search</button>
+                <button class="tablinks" onclick="clickHandle('Dog')">Uniform Cost Search</button>
+                <button class="tablinks" onclick="clickHandle('Dog')">Dijkstra</button>
+                <button class="tablinks" onclick="clickHandle('Dog')">A*</button>
+                <button class="tablinks" onclick="clickHandle('Dog')">Random Walk</button>
+                <button class="tablinks" onclick="clickHandle('Dog')">Random Next</button>
+            </div>
+    
+            <div id="tabcontent">
+                <div id="tabcontent-info">
+                    <h3>Algorithm</h3>
+                    <p id="tabcontent-info-text">
+    
+                    </p>
+                </div>
+    
+                <div id="tabcontent-code">
+                    <h3>Typescript Code</h3>
                     <pre>
                         <code id="tabcontent-code-text">
                             
                         </code>
                     </pre>
-            </div>
-
-            <div id="tabcontent-pseudo">
-                <h3>Pseudo Code</h3>
-                <code id="tabcontent-pseudo-text">
-                </code>
-            </div>
-
-
-        </div>
-    </div>
-
-    <script>
-        function clickHandle(text, code, pseudo) {
-            const tabcontent = document.getElementById("tabcontent");
-            const tabcontentInfoText = document.getElementById("tabcontent-info-text");
-            const tabcontentCodeText = document.getElementById("tabcontent-code-text");
-            const tabcontentPseudoText = document.getElementById("tabcontent-pseudo-text");
-
-            loadFile("../info_data/" + text + ".txt").then(function(result) {
-                tabcontentInfoText.innerHTML = result;
-            });
-
-            loadFile("../info_data/" + code + ".txt").then(function(result) {
-                tabcontentCodeText.innerHTML = result;
-            });
-
-            loadFile("../info_data/" + pseudo + ".txt").then(function(result) {
-                tabcontentPseudoText.innerHTML = result;
-            });
-
-
-        }
-
-
-        function loadFile(url) {
-            return fetch(url)
-            .then( r => r.text() )
-            .then( t => {
-                return t;
-            });
-        }
+                </div>
+    
+                <div id="tabcontent-pseudo">
+                    <h3>Pseudo Code</h3>
+                    <code id="tabcontent-pseudo-text">
+                    </code>
+                </div>
+            </div>    
+        </section>
+        
+        <section id="about">
+            <h2>About this page</h2>
+            <p>I made this page to help other people learn how pathfinding algorithms work :D</p>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus necessitatibus, velit repudiandae quo ipsum, cupiditate corporis ut perspiciatis recusandae quae deleniti modi. Odit quia ducimus a dolorum voluptatum facere velit!
+            Nam doloribus non perferendis, assumenda harum rem minima ducimus, repudiandae maxime quod earum, consequatur ipsum atque. Aspernatur illo earum magnam, obcaecati, reprehenderit labore aut ipsam nihil, sit dolores quaerat dolor.
+            Atque, odit? Assumenda est quasi numquam iusto iste reprehenderit. Obcaecati, eum! Aperiam architecto doloremque officiis. Sapiente debitis accusantium repudiandae. Consequuntur, esse maxime delectus repellat eius minus. Fuga vel dicta facere.
+            Iste quo suscipit rem quos temporibus vitae laudantium. Sequi qui, quisquam necessitatibus eligendi ullam tempore ex iure. Officia voluptas, recusandae incidunt nam fuga omnis odit quibusdam magni quis quod ad.</p>
+        </section>
         
 
-    </script>
+        <section id="help">
+            <h2>HELP</h2>
+            <p></p>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, nisi.</p>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minima.</p>
+            <p>Maiores ducimus expedita voluptate et vel, placeat est nulla?</p>
+            <p>Autem alias a eos tempore earum vel culpa quaerat.</p>
+            <p>Mollitia sequi quisquam assumenda incidunt!</p>
+            <p>Quis fuga accusamus eum maxime consequatur.</p>
+        </section>
 
+
+        <section id="imprint">
+            <h2>Imprint</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque suscipit, consectetur harum unde corporis corrupti reprehenderit. Quae nisi voluptas soluta quis neque, voluptate cum, recusandae ab, nam quidem iure tempore.
+            Nihil rem mollitia sint, suscipit consequuntur quis cupiditate ea delectus corrupti, dolores minima perspiciatis? Vel numquam fugit laborum eveniet, dignissimos nesciunt ullam maxime in eligendi? Suscipit consequatur distinctio repellendus quae.
+            Odio iusto corrupti totam quisquam, tempora eius ea sit consequuntur illo nisi doloribus perspiciatis distinctio nobis hic quae expedita doloremque praesentium id nam soluta deleniti sed iure. Repellendus, nemo debitis.
+            Ab labore, explicabo quam excepturi mollitia sit reiciendis similique iure officiis dolores provident? Ipsum odio vero corrupti perferendis quod earum aliquid libero, exercitationem dolore magnam cum, tempore a tempora quasi.
+            Pariatur illo in reiciendis tenetur harum deleniti asperiores a nam alias? Sunt, sint velit. Deserunt ipsam nulla autem maiores atque, architecto debitis maxime adipisci minus tempora aspernatur repellendus odio praesentium?
+            <br><br>
+            Quaerat architecto eum amet in voluptatem labore dolorem corporis dicta minus? Itaque, reprehenderit blanditiis. Omnis rerum natus quod nihil, similique recusandae quis laborum numquam adipisci provident ipsam, nostrum, rem possimus!
+            Necessitatibus earum ducimus, magni culpa dolore corrupti quaerat, illum voluptate, quod animi repudiandae fugiat dicta nemo? Doloremque iusto quae delectus corporis dolorem necessitatibus rerum asperiores repellendus totam. Ullam, iusto ea.
+            Fugiat magnam, mollitia, obcaecati dolore animi, impedit in ab veniam corporis voluptates fugit. Repellendus minus quibusdam deleniti doloremque, vel praesentium delectus libero porro repudiandae a, quia optio debitis dolorem placeat?
+            Cumque sunt impedit eaque unde consequatur doloremque nostrum expedita vel quae eum optio veritatis quos consectetur fuga soluta architecto deserunt deleniti explicabo, similique aliquid doloribus voluptatibus itaque quis quam. Dolores?
+            Enim, ea. Soluta blanditiis, neque commodi, sequi autem repellendus tenetur facere eveniet omnis odit, aspernatur nisi rerum quia vitae ratione eaque libero nulla impedit? Reprehenderit quaerat dignissimos consequuntur cum officiis!
+            Natus a recusandae optio doloremque aliquam tenetur id in blanditiis tempora dolores, minus ullam saepe quisquam nihil magni eius quae impedit quidem, repellat velit veritatis eos pariatur cum? Obcaecati, quas?
+            <br><br>
+            Inventore minima nostrum culpa aperiam, reprehenderit doloremque sed itaque cum architecto quod possimus voluptas repellendus tenetur quidem iusto neque aspernatur alias tempora. Sapiente facilis illum alias recusandae, provident aliquid molestiae.
+            Perspiciatis facere eius eos ducimus distinctio perferendis impedit exercitationem accusamus dolores delectus obcaecati, veniam unde nulla rerum totam, officiis voluptatem quos natus laboriosam repellat corrupti a quis facilis sapiente! Voluptate!
+            Fugiat quidem molestias temporibus iure, qui placeat ut expedita maiores possimus aut veniam tempora libero minus sunt vero. Aliquid, itaque? Minima delectus temporibus nesciunt voluptas beatae natus fuga sit ea!
+            Repellat consectetur expedita facere delectus at sint, hic doloribus reiciendis deleniti dolorum error sequi suscipit quidem minima et saepe. Nesciunt magnam sit repellendus assumenda cupiditate quo quia possimus ab debitis!
+            Perferendis architecto provident minus pariatur quae ipsa est expedita sint iure optio doloremque dicta porro natus ad nam nobis dolorum maxime, inventore sed, aliquid tempore quas quo blanditiis. Officiis, delectus.
+            Officiis pariatur molestiae aperiam natus laudantium dignissimos at laborum repellat quasi, facere inventore quia labore deleniti a non nihil dolorum enim quisquam! Consectetur adipisci, vero distinctio nam illum amet ullam.
+            <br><br>
+            Ea porro modi sapiente perferendis similique magnam sint reprehenderit velit suscipit omnis quo excepturi debitis dicta culpa facilis nam assumenda eveniet nisi repellendus ducimus iure repellat eaque, qui non? Cupiditate?
+            Nihil, assumenda tempora? Dicta nesciunt voluptate, et est qui cupiditate quidem deleniti ratione labore ad saepe architecto? Explicabo possimus optio enim quas doloremque. Quis repellat veritatis doloribus, voluptatum nihil veniam.
+            Laborum veniam suscipit ex excepturi beatae, ducimus et distinctio similique, ea possimus accusamus exercitationem aliquam cupiditate accusantium nihil dolorem eveniet. Atque earum ipsa nihil deleniti molestiae dolorum suscipit, voluptates quidem!</p>
+        </section>
+
+        <footer>
+            <a href="#main">made by YukkiTimmy <br> ▲ take me up ▲</a>
+        </footer>
+    </div>
+    
+
+    <script src="/dist/main.js"></script>
     <script type="module" src="/dist/index.js"></script>
 </body>
 </html>

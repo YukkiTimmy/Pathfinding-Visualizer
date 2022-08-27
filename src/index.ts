@@ -14,7 +14,7 @@ import { randomNext } from "./graph-search-algorithms/random_next";
 import { randomizedPrimeAlgorithm } from "./randomized_prime_algorithm";
 
 
-const STARTWIDTH : number = 45
+const STARTWIDTH : number = 80
 var WIDTH : number = STARTWIDTH;
 const STARTHEIGHT : number = 30;
 var HEIGHT : number = STARTHEIGHT;
@@ -29,25 +29,26 @@ export var stop : boolean = false;
 
 var clickType : Nullable<String> = null;
 
-
+var speed : number = 0;
 
 document.getElementById("grid-base")!.addEventListener("mousedown", setPrimaryButtonState);
 document.getElementById("grid-base")!.addEventListener("mousemove", setPrimaryButtonState);
 document.getElementById("grid-base")!.addEventListener("mouseup", setPrimaryButtonState);
 
+var start : any;
 
 function init() {
     // Set up an empty array of Cells
     var grid = initCellArray();
-
+    
     // Set up the grid of divs
     setUpGrid(grid);
-
+    
     // Set the start and end Cells
-    startCell = setStartCell(grid, WIDTH - WIDTH + 3, Math.floor(HEIGHT / 2));
-    endCell = setEndCell(grid, WIDTH - 3, Math.floor(HEIGHT / 2));
-
-
+    startCell = setStartCell(grid, WIDTH - WIDTH + 4, Math.floor(HEIGHT / 2));
+    endCell = setEndCell(grid, WIDTH - 5, Math.floor(HEIGHT / 2));
+    
+    
     // Get the diffrent buttons
     const startBtn = document.getElementById("start-btn");
     const stopBtn = document.getElementById("stop-btn");
@@ -55,8 +56,12 @@ function init() {
     const algorithmSelector = document.getElementById("algorithm-selection") as HTMLSelectElement;
     const widthSlider = document.getElementById("width-slider") as HTMLInputElement;
     const heightSlider = document.getElementById("height-slider") as HTMLInputElement;
+    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
     const defaultDimBtn = document.getElementById("default-dim-btn") as HTMLInputElement;
-
+    
+    const darkmodeBtn = document.getElementById("darkmode") as HTMLInputElement;
+    const instantBtn = document.getElementById("instant") as HTMLInputElement;
+    
     // start function
     startBtn?.addEventListener('click', e => {    
         stop = false;
@@ -64,8 +69,10 @@ function init() {
         
         let selection = algorithmSelector.options[algorithmSelector.selectedIndex];
         
-        startBtn.style.display = "none";
-        stopBtn!.style.display = "inline";
+        toggleStartStop();
+        
+        start = new Date();
+        
 
         if (selection.value == "depth-first-search")
             depthFirstSearch(grid, startCell, endCell);
@@ -92,8 +99,7 @@ function init() {
 
     // stop function
     stopBtn?.addEventListener('click', e => {
-        startBtn!.style.display = "inline";
-        stopBtn.style.display = "none";
+        toggleStartStop(false);
         setStop();
         resetGrid();
     });
@@ -101,8 +107,7 @@ function init() {
 
     // reset Button
     resetBtn?.addEventListener('click', e => {
-        startBtn!.style.display = "inline";
-        stopBtn!.style.display = "none";
+        toggleStartStop(false);
 
         if (!stop) setStop();
         
@@ -116,11 +121,9 @@ function init() {
         startCell?.div?.removeAttribute("id");
         endCell!.isStart = false;
         endCell?.div?.removeAttribute("id");
+        
         randomizedPrimeAlgorithm(grid);
-
-        startBtn!.style.display = "inline";
-        stopBtn!.style.display = "none";
-        resetGrid();
+             
     });
 
 
@@ -141,6 +144,42 @@ function init() {
     });
 
 
+
+    // Menu
+    darkmodeBtn!.checked = false;
+
+    darkmodeBtn!.onchange = function() {
+        const html = document.getElementsByTagName("html")[0];
+        
+        if (html.dataset.theme != "dark")
+            html.dataset.theme = "dark";
+        else
+            html.dataset.theme = "";
+    };
+
+
+
+    // SPEED
+    speed = +speedSlider.value;
+    speedSlider.oninput = function() {
+        speed = +speedSlider.value;
+        instantBtn.checked = false;
+        
+        // const span : HTMLSpanElement = document.getElementById("speed-span")!;
+        // span.innerHTML = speedSlider.value;
+    }
+
+    instantBtn.checked = false;
+    instantBtn!.addEventListener('click', e => {
+        if (instantBtn.checked) {
+            speedSlider!.value = "0";
+            speed = 0;
+        }
+        else {
+            speedSlider!.value = "500";
+            speed = 500;
+        }
+    });
 
 }
 
@@ -254,7 +293,6 @@ var primaryMouseButtonDown = false;
 
 function setPrimaryButtonState(e : MouseEvent) {
   var flags = e.buttons;
-  console.log(flags);
   primaryMouseButtonDown = (flags && 1) === 1;
 }
 
@@ -314,6 +352,13 @@ export function getPath(lastCell : Nullable<Cell>) {
         return;
     }
 
+
+    var end : any = new Date();
+    var secondsElapsed : number = (end - start) / 1000;
+
+    console.log(secondsElapsed + "s");
+
+
     let path : Cell[] = [];
 
     // loop through every cell and add it to the array
@@ -339,9 +384,21 @@ async function animatePath(path : Cell[]) {
         path[i].div?.classList.replace("grid-cell-explored", "grid-cell-path");
     }
 
-    document.getElementById("start-btn")!.style.display = "inline";
-    document.getElementById("stop-btn")!.style.display = "none";
-    stop = false;
+    if (!stop) {
+        toggleStartStop();
+        stop = false;
+    } 
+}
+
+
+function toggleStartStop(start : boolean = true) {
+    if (start) {
+        document.getElementById("start-btn")!.style.display = "none";
+        document.getElementById("stop-btn")!.style.display = "flex";
+    } else {
+        document.getElementById("start-btn")!.style.display = "flex";
+        document.getElementById("stop-btn")!.style.display = "none";
+    }
 }
 
 // stop the functions
@@ -351,8 +408,7 @@ function setStop() {
 
 
 export function getSpeed() : number {
-    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
-    return +speedSlider.value;
+    return speed;
 } 
 
 
@@ -365,3 +421,4 @@ export function sleep(ms : number) {
 
 
 init();
+
